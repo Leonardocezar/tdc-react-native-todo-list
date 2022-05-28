@@ -1,115 +1,115 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
+import React, {useState} from 'react';
 import {
+  FlatList,
+  Pressable,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export const App = () => {
+  const [todos, setTodos] = useState<string[]>([]);
+  const [todo, setTodo] = useState('');
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+  const addTodo = () => {
+    setTodos([...todos, todo]);
+    setTodo('');
+  };
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const deleteTodo = (todoIndex: number) => {
+    setTodos(prevstate => {
+      return prevstate?.filter((v, index) => index !== todoIndex);
+    });
+  };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const deleteAllTodos = () => setTodos([]);
+
+  const renderTodo = ({item: t, index}: {item: string; index: number}) => {
+    return (
+      <Pressable
+        key={index}
+        style={styles.containerTodo}
+        onPress={() => deleteTodo(index)}>
+        <Text style={styles.labelTodo}>{`${index + 1} : ${t}`}</Text>
+      </Pressable>
+    );
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TextInput
+          style={styles.input}
+          value={todo}
+          onChangeText={text => setTodo(text)}
+          onSubmitEditing={addTodo}
+        />
+        <Pressable style={styles.buttonAdd} onPress={addTodo}>
+          <Text>Add</Text>
+        </Pressable>
+      </View>
+      <FlatList
+        ListEmptyComponent={<Text>No todo found, Add first one </Text>}
+        data={todos}
+        renderItem={renderTodo}
+        contentContainerStyle={styles.flatlist}
+      />
+      <Pressable style={styles.buttonCleanAll} onPress={deleteAllTodos}>
+        <Text>Delete All</Text>
+      </Pressable>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFCB94',
+  },
+  header: {
+    flexDirection: 'row',
+    marginBottom: 10,
     paddingHorizontal: 24,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  input: {
+    flex: 1,
+    height: 50,
+    borderRadius: 4,
+    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: '#fff',
+    padding: 10,
+    marginRight: 10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  buttonAdd: {
+    height: 50,
+    borderRadius: 4,
+    backgroundColor: '#fc8b12',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
-  highlight: {
-    fontWeight: '700',
+  flatlist: {
+    paddingHorizontal: 24,
+    marginBottom: 20,
+  },
+  containerTodo: {
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    marginBottom: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+  },
+  labelTodo: {
+    fontSize: 13,
+  },
+  buttonCleanAll: {
+    height: 50,
+    borderRadius: 4,
+    backgroundColor: '#fc8b12',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    marginHorizontal: 24,
+    alignItems: 'center',
   },
 });
-
-export default App;
