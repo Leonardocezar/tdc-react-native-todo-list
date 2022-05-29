@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   FlatList,
+  Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -8,12 +10,16 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import Assets from '@images/Assets';
 
 export const App = () => {
   const [todos, setTodos] = useState<string[]>([]);
   const [todo, setTodo] = useState('');
 
   const addTodo = () => {
+    if (todo.length === 0) {
+      return Alert.alert('Input is empty');
+    }
     setTodos([...todos, todo]);
     setTodo('');
   };
@@ -40,6 +46,7 @@ export const App = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <Image source={Assets.bookIcon} style={styles.image} />
         <TextInput
           style={styles.input}
           value={todo}
@@ -72,6 +79,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
     paddingHorizontal: 24,
+  },
+  image: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
+    marginRight: 10,
   },
   input: {
     flex: 1,
