@@ -25,9 +25,20 @@ export const App = () => {
   };
 
   const deleteTodo = (todoIndex: number) => {
-    setTodos(prevstate => {
-      return prevstate?.filter((v, index) => index !== todoIndex);
-    });
+    Alert.alert('Delete todo', 'Are you sure?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        style: 'default',
+        onPress: () =>
+          setTodos(prevstate => {
+            return prevstate?.filter((v, index) => index !== todoIndex);
+          }),
+      },
+    ]);
   };
 
   const deleteAllTodos = () => setTodos([]);
