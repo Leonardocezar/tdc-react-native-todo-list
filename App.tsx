@@ -34,12 +34,14 @@ export const App = () => {
 
   const renderTodo = ({item: t, index}: {item: string; index: number}) => {
     return (
-      <Pressable
-        key={index}
-        style={styles.containerTodo}
-        onPress={() => deleteTodo(index)}>
+      <View key={index} style={styles.containerTodo}>
         <Text style={styles.labelTodo}>{`${index + 1} : ${t}`}</Text>
-      </Pressable>
+        <Pressable
+          style={styles.buttonDelete}
+          onPress={() => deleteTodo(index)}>
+          <Text style={styles.buttonDeleteLabel}>Delete</Text>
+        </Pressable>
+      </View>
     );
   };
 
@@ -107,6 +109,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   containerTodo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 4,
     marginBottom: 5,
@@ -115,6 +120,16 @@ const styles = StyleSheet.create({
   },
   labelTodo: {
     fontSize: 13,
+  },
+  buttonDelete: {
+    borderRadius: 4,
+    backgroundColor: '#FA0303',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
+  buttonDeleteLabel: {
+    color: '#fff',
   },
   buttonCleanAll: {
     height: 50,
